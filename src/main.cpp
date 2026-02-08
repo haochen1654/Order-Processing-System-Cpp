@@ -1,56 +1,68 @@
-#include <iostream>
+#include "absl/flags/flag.h"
+#include "absl/flags/parse.h"
 #include <chrono>
+#include <iostream>
 #include <signal.h>
 #include <thread>
-#include "absl/flags/flag.h"
 
 #include "client/client.h"
 
-struct Args : public argparse::Args {
-  std::string& endpoint = kwarg("endpoint", "Problem server endpoint").set_default("https://api.cloudkitchens.com");
-  std::string& auth = kwarg("auth", "Authentication token");
-  std::string& name = kwarg("name", "Problem name. Leave blank (optional)").set_default("");
-  long& seed = kwarg("seed", "Problem seed (random if zero)").set_default(0);
+// -------- Flag definitions --------
+ABSL_FLAG(std::string, endpoint, "https://api.cloudkitchens.com",
+          "Problem server endpoint");
 
-  long& rate = kwarg("rate", "Inverse order rate (milliseconds)").set_default(500);
-  long& min = kwarg("min", "Minimum pickup time (seconds)").set_default(4);
-  long& max = kwarg("max", "Maximum pickup time (seconds)").set_default(8);
-};
+ABSL_FLAG(std::string, auth, "", "Authentication token");
 
-void interrupted(int s)
-{
-    std::quick_exit(1);
-}
+ABSL_FLAG(std::string, name, "", "Problem name. Leave blank (optional)");
 
-int main(int argc, char** argv) {
+ABSL_FLAG(long, seed, 0, "Problem seed (random if zero)");
+
+ABSL_FLAG(long, rate, 500, "Inverse order rate (milliseconds)");
+
+ABSL_FLAG(long, min, 4, "Minimum pickup time (seconds)");
+
+ABSL_FLAG(long, max, 8, "Maximum pickup time (seconds)");
+
+void interrupted(int s) { std::quick_exit(1); }
+
+int main(int argc, char **argv) {
   signal(SIGINT, interrupted);
+
   try {
-    auto args = argparse::parse<Args>(argc, argv);
+    // Parse flags
+    absl::ParseCommandLine(argc, argv);
 
-    auto rate = std::chrono::milliseconds(args.rate);
-    auto min = std::chrono::seconds(args.min);
-    auto max = std::chrono::seconds(args.max);
+    // Read flag values
+    auto rate = std::chrono::milliseconds(absl::GetFlag(FLAGS_rate));
+    auto min = std::chrono::seconds(absl::GetFlag(FLAGS_min));
+    auto max = std::chrono::seconds(absl::GetFlag(FLAGS_max));
 
-    Client client(args.endpoint, args.auth);
-    auto problem = client.newProblem(args.name, args.seed);
+    const std::string &endpoint = absl::GetFlag(FLAGS_endpoint);
+    const std::string &auth = absl::GetFlag(FLAGS_auth);
+    const std::string &name = absl::GetFlag(FLAGS_name);
+    long seed = absl::GetFlag(FLAGS_seed);
 
-    // ------ Execution harness logic goes here using rate, min and max ----
+    Client client(endpoint, auth);
+    auto problem = client.newProblem(name, seed);
 
+    // ------ Execution harness logic goes here ------
     std::vector<Action> actions;
     for (auto order : problem.orders) {
       std::cout << "Received: " << order << std::endl;
-      actions.emplace_back(Action(std::chrono::steady_clock::now(), order.id, "place", "cooler"));
+
+      actions.emplace_back(Action(std::chrono::steady_clock::now(), order.id,
+                                  "place", "cooler"));
 
       std::this_thread::sleep_for(rate);
     }
-
-    // ----------------------------------------------------------------------
+    // ----------------------------------------------
 
     auto result = client.solve(problem.testId, rate, min, max, actions);
     std::cout << "Result: " << result << std::endl;
+
     return 0;
 
-  } catch (const std::exception& e) {
+  } catch (const std::exception &e) {
     std::cout << "Simulation failed: " << e.what() << std::endl;
     return 1;
   }

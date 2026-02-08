@@ -6,9 +6,9 @@
 
 // Problem represents a test problem
 struct Problem {
-    Problem(const std::string& testId, const std::vector<Order>& orders)
-        : testId(testId), orders(orders) {}
+  Problem(const std::string &testId, const std::vector<Order> &orders)
+      : testId(testId), orders(orders) {}
 
-    std::string testId;
-    std::vector<Order> orders;
+  std::string testId;
+  std::vector<Order> orders;
 };

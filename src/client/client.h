@@ -1,16 +1,18 @@
-#pragma once
+#ifndef CLIENT_H
+#define CLIENT_H
 
 #include <chrono>
 #include <string>
 #include <vector>
 
+#include "absl/strings/string_view.h"
 #include "action.h"
 #include "problem.h"
 
 // Client is a client for fetching and solving challenge test problems.
 class Client {
 public:
-  Client(const std::string &endpoint, const std::string &auth)
+  Client(absl::string_view endpoint, absl::string_view auth)
       : endpoint(endpoint), auth(auth) {}
 
   // newProblem fetches a new test problem from the server. The URL also works
@@ -28,3 +30,5 @@ private:
   std::string endpoint;
   std::string auth;
 };
+
+#endif // CLIENT_H

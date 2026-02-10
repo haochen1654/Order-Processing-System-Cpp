@@ -33,14 +33,14 @@ int main(int argc, char **argv) {
     absl::ParseCommandLine(argc, argv);
 
     // Read flag values
-    auto rate = std::chrono::milliseconds(absl::GetFlag(FLAGS_rate));
-    auto min = std::chrono::seconds(absl::GetFlag(FLAGS_min));
-    auto max = std::chrono::seconds(absl::GetFlag(FLAGS_max));
+    const auto rate = std::chrono::milliseconds(absl::GetFlag(FLAGS_rate));
+    const auto min = std::chrono::seconds(absl::GetFlag(FLAGS_min));
+    const auto max = std::chrono::seconds(absl::GetFlag(FLAGS_max));
 
-    const std::string &endpoint = absl::GetFlag(FLAGS_endpoint);
-    const std::string &auth = absl::GetFlag(FLAGS_auth);
-    const std::string &name = absl::GetFlag(FLAGS_name);
-    long seed = absl::GetFlag(FLAGS_seed);
+    const std::string endpoint = absl::GetFlag(FLAGS_endpoint);
+    const std::string auth = absl::GetFlag(FLAGS_auth);
+    const std::string name = absl::GetFlag(FLAGS_name);
+    const long seed = absl::GetFlag(FLAGS_seed);
 
     Client client(endpoint, auth);
     auto problem = client.newProblem(name, seed);

@@ -6,12 +6,31 @@ load(
 
 cc_library(
     name = "action",
-    hdrs = ["client/action.h"],
+    hdrs = ["ledger/action.h"],
     # We define the visibilty explicitly,
     # so it can be accessed from other packages.
     # https://bazel.build/concepts/visibility
     visibility = ["//visibility:public"],
-    deps = ["@nlohmann_json//:json"],
+    deps = [
+        "@abseil-cpp//absl/status",
+        "@abseil-cpp//absl/strings:string_view",
+        "@abseil-cpp//absl/time",
+        "@jsoncpp",
+    ],
+)
+
+cc_library(
+    name = "action_ledger",
+    srcs = ["ledger/action_ledger.cpp"],
+    hdrs = ["ledger/action_ledger.h"],
+    # We define the visibilty explicitly,
+    # so it can be accessed from other packages.
+    # https://bazel.build/concepts/visibility
+    visibility = ["//visibility:public"],
+    deps = [
+        ":action",
+        "@abseil-cpp//absl/synchronization",
+    ],
 )
 
 cc_library(
@@ -45,6 +64,7 @@ cc_library(
     deps = [
         ":action",
         ":problem",
+        "@abseil-cpp//absl/strings:string_view",
         "@cpr",
     ],
 )

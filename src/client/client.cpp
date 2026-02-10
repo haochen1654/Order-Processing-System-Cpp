@@ -6,7 +6,10 @@
 #include <cpr/cpr.h>
 #include <nlohmann/json.hpp>
 
+namespace {
 using json = nlohmann::json;
+
+} // namespace
 
 Problem Client::newProblem(const std::string &name, long seed) {
   if (seed == 0) {

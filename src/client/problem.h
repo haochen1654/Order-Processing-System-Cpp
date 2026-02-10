@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PROBLEM_H
+#define PROBLEM_H
 
 #include <string>
 
@@ -12,3 +13,5 @@ struct Problem {
   std::string testId;
   std::vector<Order> orders;
 };
+
+#endif // PROBLEM_H

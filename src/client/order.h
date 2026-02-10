@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ORDER_H
+#define ORDER_H
 
 #include <nlohmann/json.hpp>
 #include <string>
@@ -18,3 +19,5 @@ inline std::ostream &operator<<(std::ostream &out, const Order &order) {
   out << nlohmann::json(order);
   return out;
 }
+
+#endif // ORDER_H

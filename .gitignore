@@ -27,9 +27,8 @@ replay_pid*
 /target/
 .gradle/
 build/
-bazel-bin/
-bazel-order-processing-system-cpp/
-bazel-out/
+bazel*
+*lock
 
 # VS Code files
 .vscode/

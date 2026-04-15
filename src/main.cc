@@ -5,7 +5,7 @@
 #include <signal.h>
 #include <thread>
 
-#include "client/client.h"
+#include "src/client/client.h"
 
 // -------- Flag definitions --------
 ABSL_FLAG(std::string, endpoint, "https://api.cloudkitchens.com",
@@ -24,6 +24,8 @@ ABSL_FLAG(long, min, 4, "Minimum pickup time (seconds)");
 ABSL_FLAG(long, max, 8, "Maximum pickup time (seconds)");
 
 void interrupted(int s) { std::quick_exit(1); }
+
+using ::ledger::Action;
 
 int main(int argc, char **argv) {
   signal(SIGINT, interrupted);
@@ -50,8 +52,9 @@ int main(int argc, char **argv) {
     for (auto order : problem.orders) {
       std::cout << "Received: " << order << std::endl;
 
-      actions.emplace_back(Action(std::chrono::steady_clock::now(), order.id,
-                                  "place", "cooler"));
+      actions.emplace_back(
+          Action(std::chrono::steady_clock::now().time_since_epoch().count(),
+                 order.id, "place", "cooler"));
 
       std::this_thread::sleep_for(rate);
     }

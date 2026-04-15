@@ -17,6 +17,11 @@ struct Action {
   std::string
       target; // heater, cooler or shelf. Target is the destination for move
 
+  // Constructor
+  Action(int64_t ts, std::string id_, std::string action_, std::string target_)
+      : timestamp(ts), id(std::move(id_)), action(std::move(action_)),
+        target(std::move(target_)) {}
+
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(Action, timestamp, id, action, target);
 };
 

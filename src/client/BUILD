@@ -32,8 +32,8 @@ cc_library(
     # https://bazel.build/concepts/visibility
     visibility = ["//visibility:public"],
     deps = [
-        "//src/ledger:action",
         ":problem",
+        "//src/ledger:action",
         "@abseil-cpp//absl/strings:string_view",
         "@cpr",
     ],

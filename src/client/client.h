@@ -6,8 +6,8 @@
 #include <vector>
 
 #include "absl/strings/string_view.h"
-#include "action.h"
 #include "problem.h"
+#include "src/ledger/action.h"
 
 // Client is a client for fetching and solving challenge test problems.
 class Client {
@@ -24,7 +24,7 @@ public:
   std::string solve(const std::string &testId, std::chrono::microseconds rate,
                     std::chrono::microseconds min,
                     std::chrono::microseconds max,
-                    const std::vector<Action> &actions);
+                    const std::vector<ledger::Action> &actions);
 
 private:
   std::string endpoint;

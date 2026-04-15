@@ -7,8 +7,8 @@
 #include <nlohmann/json.hpp>
 
 namespace {
-using json = nlohmann::json;
-
+using ::ledger::Action;
+using ::nlohmann::json;
 } // namespace
 
 Problem Client::newProblem(const std::string &name, long seed) {

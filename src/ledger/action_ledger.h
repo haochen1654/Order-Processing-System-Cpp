@@ -2,7 +2,7 @@
 #define ACTION_LEDGER_H
 
 #include "action.h"
-#include <absl/Status/status.h>
+#include <absl/status/status.h>
 #include <absl/synchronization/mutex.h>
 #include <absl/time/time.h>
 #include <vector>
@@ -11,10 +11,10 @@ namespace ledger {
 class ActionLedger {
 public:
   explicit ActionLedger(const std::vector<Action> &actions)
-      : actions_(std::move(actions)){};
+      : actions_(std::move(actions)) {};
 
   // Default constructor
-  ~ActionLedger(){};
+  ~ActionLedger() {};
 
   // Delete copy and move constructors and assignment operators
   ActionLedger(const ActionLedger &action_ledger) = delete;

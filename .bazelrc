@@ -1,0 +1,5 @@
+# Bazel 9 removed native C++ rules from built-ins; autoload them from rules_cc
+common --incompatible_autoload_externally=+@rules_cc
+
+# cpr (via curl) uses std::filesystem APIs requiring macOS 10.15+
+build --macos_minimum_os=10.15

@@ -35,3 +35,6 @@ bazel*
 
 # Bazel lock files
 MODULE.bazel.lock
+
+# Index files
+.DS_Store

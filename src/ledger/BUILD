@@ -10,12 +10,7 @@ cc_library(
     # so it can be accessed from other packages.
     # https://bazel.build/concepts/visibility
     visibility = ["//visibility:public"],
-    deps = [
-        "@abseil-cpp//absl/status",
-        "@abseil-cpp//absl/strings:string_view",
-        "@abseil-cpp//absl/time",
-        "@nlohmann_json//:json",
-    ],
+    deps = ["@nlohmann_json//:json"],
 )
 
 cc_library(

@@ -1,11 +1,11 @@
 #include "absl/flags/flag.h"
 #include "absl/flags/parse.h"
+#include "absl/log/log.h"
+#include "src/client/client.h"
 #include <chrono>
 #include <iostream>
 #include <signal.h>
 #include <thread>
-
-#include "src/client/client.h"
 
 // -------- Flag definitions --------
 ABSL_FLAG(std::string, endpoint, "https://api.cloudkitchens.com",
@@ -23,9 +23,7 @@ ABSL_FLAG(long, min, 4, "Minimum pickup time (seconds)");
 
 ABSL_FLAG(long, max, 8, "Maximum pickup time (seconds)");
 
-void interrupted(int s) { std::quick_exit(1); }
-
-using ::ledger::Action;
+void interrupted(int s) { LOG(FATAL) << "Interrupted by signal: " << s; }
 
 int main(int argc, char **argv) {
   signal(SIGINT, interrupted);
@@ -48,13 +46,13 @@ int main(int argc, char **argv) {
     auto problem = client.newProblem(name, seed);
 
     // ------ Execution harness logic goes here ------
-    std::vector<Action> actions;
+    std::vector<::ledger::Action> actions;
     for (auto order : problem.orders) {
       std::cout << "Received: " << order << std::endl;
 
-      actions.emplace_back(
-          Action(std::chrono::steady_clock::now().time_since_epoch().count(),
-                 order.id, "place", "cooler"));
+      actions.emplace_back(::ledger::Action(
+          std::chrono::steady_clock::now().time_since_epoch().count(), order.id,
+          "place", "cooler"));
 
       std::this_thread::sleep_for(rate);
     }

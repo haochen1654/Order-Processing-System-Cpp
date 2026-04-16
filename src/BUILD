@@ -15,5 +15,6 @@ cc_binary(
         "//src/ledger:action",
         "@abseil-cpp//absl/flags:flag",
         "@abseil-cpp//absl/flags:parse",
+        "@abseil-cpp//absl/log:log",
     ],
 )
